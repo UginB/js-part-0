@@ -10,8 +10,6 @@ const areEqual = (a, b) => {
         return JSON.stringify(a) === JSON.stringify(b);
     }
     return a === b;
-    // Compare arrays of primitives
-    // Remember: [] !== []
 };
 
 const test = (whatWeTest, actualResult, expectedResult) => {
@@ -19,7 +17,7 @@ const test = (whatWeTest, actualResult, expectedResult) => {
         console.log(`[OK] ${whatWeTest}\n`);
     } else {
         console.error(`[FAIL] ${whatWeTest}`);
-        console.debug('Expect+ed:');
+        console.debug('Expected:');
         console.debug(expectedResult);
         console.debug('Actual:');
         console.debug(actualResult);
@@ -31,60 +29,60 @@ const test = (whatWeTest, actualResult, expectedResult) => {
 
 const getType = (value) => {
     return typeof value;
-    // Return string with a native JS type of value
 };
 
 const getTypesOfItems = (arr) => {
     return arr.map((item) => getType(item));
-    // Return array with types of items of given array
 };
 
 const allItemsHaveTheSameType = (arr) => {
     return arr.every((item) => getType(item) === getType(arr[0]));
-    // Return true if all items of array have the same type
 };
 
 const getRealType = (value) => {
-    if (value === null) {
-        return 'null';
-    } else if (getType(value) === 'string') {
-        return 'string';
-    } else if (getType(value) === 'boolean') {
-        return 'boolean';
-    } else if (getType(value) === 'bigint') {
-        return 'bigint';
-    } else if (getType(value) === 'symbol') {
-        return 'symbol';
-    } else if (value === undefined) {
-        return 'undefined';
-    } else if (getType(value) === 'number' && isNaN(value)) {
-        return 'NaN';
-    } else if (value === Infinity) {
-        return 'Infinity';
-    } else if (getType(value) === 'number') {
-        return 'number';
-    } else if (`${new Date(value)}` !== 'Invalid Date') {
-        return 'date';
-    } else if (getType(value) === 'function') {
-        return 'function';
-    } else if (value instanceof RegExp) {
-        return 'regexp';
-    } else if (value instanceof Set) {
-        return 'set';
-    } else if (value instanceof Map) {
-        return 'map';
-    } else if (value instanceof Array) {
-        return 'array';
-    } else if (value instanceof Object) {
-        return 'object';
+    switch (getType(value)) {
+        case 'string':
+            return 'string';
+        case 'boolean':
+            return 'boolean';
+        case 'bigint':
+            return 'bigint';
+        case 'symbol':
+            return 'symbol';
+        case 'undefined':
+            return 'undefined';
+        case 'number':
+            if (isNaN(value)) {
+                return 'NaN';
+            } else if (value === Infinity) {
+                return 'Infinity';
+            }
+            return 'number';
+        case 'function':
+            return 'function';
+        case 'object':
+            if (value === null) {
+                return 'null';
+            } else if (value instanceof Date) {
+                return 'date';
+            } else if (value instanceof RegExp) {
+                return 'regexp';
+            } else if (value instanceof Set) {
+                return 'set';
+            } else if (value instanceof Map) {
+                return 'map';
+            } else if (value instanceof Array) {
+                return 'array';
+            } else if (value instanceof Object) {
+                return 'object';
+            }
+        default:
+            return 'unknown';
     }
-    return 'тип не определен';
-    // Return string with a “real” type of value.
 };
 
 const getRealTypesOfItems = (arr) => {
     return arr.map((item) => getRealType(item));
-    // Return array with real types of items of given array
 };
 
 const everyItemHasAUniqueRealType = (arr) => {
@@ -92,8 +90,6 @@ const everyItemHasAUniqueRealType = (arr) => {
         return true;
     }
     return false;
-    // Return true if there are no items in array
-    // with the same real type
 };
 
 const countRealTypes = (arr) => {
@@ -106,10 +102,15 @@ const countRealTypes = (arr) => {
             resObj[item] = 1;
         }
     }
-    return Object.entries(resObj).sort();
-    // Return an array of arrays with a type and count of items
-    // with this type in the input array, sorted by type.
-    // Like an Object.entries() result: [['boolean', 3], ['string', 5]]
+    return Object.entries(resObj).sort((a, b) => {
+        if (a[0] < b[0]) {
+            return -1;
+        }
+        if (a[0] > b[0]) {
+            return 1;
+        }
+        return 0;
+    });
 };
 
 // Tests
