@@ -1,18 +1,18 @@
 // Test utils
 
-const testBlock = (name) => {
+const testBlock = (name: string) => {
     console.groupEnd();
     console.group(`# ${name}\n`);
 };
 
-const areEqual = (a, b) => {
+const areEqual = (a: any, b: any) => {
     if (a instanceof Array && b instanceof Array) {
         return JSON.stringify(a) === JSON.stringify(b);
     }
     return a === b;
 };
 
-const test = (whatWeTest, actualResult, expectedResult) => {
+const test = (whatWeTest: string, actualResult: any, expectedResult: any) => {
     if (areEqual(actualResult, expectedResult)) {
         console.log(`[OK] ${whatWeTest}\n`);
     } else {
@@ -27,19 +27,19 @@ const test = (whatWeTest, actualResult, expectedResult) => {
 
 // Functions
 
-const getType = (value) => {
+const getType = (value: any) => {
     return typeof value;
 };
 
-const getTypesOfItems = (arr) => {
-    return arr.map((item) => getType(item));
+const getTypesOfItems = (arr: any) => {
+    return arr.map((item: any) => getType(item));
 };
 
-const allItemsHaveTheSameType = (arr) => {
+const allItemsHaveTheSameType = (arr: Array<any>) => {
     return arr.every((item) => getType(item) === getType(arr[0]));
 };
 
-const getRealType = (value) => {
+const getRealType = (value: any) => {
     switch (getType(value)) {
         case 'string':
             return 'string';
@@ -81,19 +81,19 @@ const getRealType = (value) => {
     }
 };
 
-const getRealTypesOfItems = (arr) => {
+const getRealTypesOfItems = (arr: Array<any>) => {
     return arr.map((item) => getRealType(item));
 };
 
-const everyItemHasAUniqueRealType = (arr) => {
+const everyItemHasAUniqueRealType = (arr: Array<any>) => {
     if (arr.length === new Set(getRealTypesOfItems(arr)).size) {
         return true;
     }
     return false;
 };
 
-const countRealTypes = (arr) => {
-    const resObj = {};
+const countRealTypes = (arr: Array<any>) => {
+    const resObj: {[index: string]:any} = {};
     for (let i = 0; i < arr.length; i++) {
         const item = getRealType(arr[i]);
         if (resObj[item]) {
