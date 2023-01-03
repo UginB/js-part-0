@@ -92,11 +92,7 @@ const everyItemHasAUniqueRealType = (arr: Array<unknown>):boolean => {
     return false;
 };
 
-interface countRealTypesArr {
-	[index: number]: string | number;
-};
-
-const countRealTypes = (arr: Array<unknown>): Array<countRealTypesArr> => {
+const countRealTypes = (arr: Array<unknown>): Array<[string, number]> => {
     const resObj: {[index: string]:number} = {};
     for (let i = 0; i < arr.length; i++) {
         const item = getRealType(arr[i]);
